@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stoppedChars[charIndex] = char;
         restChars.splice(restChars.indexOf(char), 1);
         if (restChars.length <= 1) {
-            clearInterval(cycleInterval);
+            clearInterval(cycleIntervalId);
             setButtonsStopState();
         }
     }
