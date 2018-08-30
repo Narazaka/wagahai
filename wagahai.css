@@ -1,0 +1,13 @@
+.char, .stop {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    font-size: medium;
+}
+
+.char {
+    background: #ccc;
+    font-weight: bold;
+    line-height: 2em;
+    text-align: center;
+}
