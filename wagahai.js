@@ -1,11 +1,12 @@
 // @ts-check
-const titleChars = "ワガママハイスペック".split("");
+const titleCharsWagahai = "ワガママハイスペック".split("");
+const titleCharsOc = "ワガママハイスペックOC".split("");
 const ignoreIndex = 8;
 const cycleInterval = 50;
 
 /**
- * 
- * @param {Array<string>} array 
+ *
+ * @param {Array<string>} array
  */
 function shuffle(array) {
     for (let i = array.length - 1; i >= 0; --i) {
@@ -17,8 +18,12 @@ function shuffle(array) {
 document.addEventListener("DOMContentLoaded", () => {
     const startButton = /** @type {HTMLButtonElement} */(document.querySelector(".start"));
     const ignoreCharCheckbox = /** @type {HTMLInputElement} */(document.querySelector(".ignoreChar"));
-    const charFields = Array.from(/** @type {NodeListOf<HTMLDivElement>} */(document.querySelectorAll(".char")));
-    const stopButtons = Array.from(/** @type {NodeListOf<HTMLButtonElement>} */(document.querySelectorAll(".stop")));
+    const overclockCheckbox = /** @type {HTMLInputElement} */(document.querySelector(".overclock"));
+    let charFields = Array.from(/** @type {NodeListOf<HTMLDivElement>} */(document.querySelectorAll(".char")));
+    let stopButtons = Array.from(/** @type {NodeListOf<HTMLButtonElement>} */(document.querySelectorAll(".stop")));
+
+    let titleChars = titleCharsWagahai;
+    fillCharElements();
 
     /** @type {number} */
     let cycleIntervalId;
@@ -37,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         startButton.disabled = false;
         ignoreCharCheckbox.disabled = false;
+        overclockCheckbox.disabled = false;
     }
 
     function setButtonsStartState() {
@@ -45,12 +51,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         startButton.disabled = true;
         ignoreCharCheckbox.disabled = true;
+        overclockCheckbox.disabled = true;
     }
 
     /**
-     * 
-     * @param {HTMLButtonElement} stopButton 
-     * @param {boolean} enabled 
+     *
+     * @param {HTMLButtonElement} stopButton
+     * @param {boolean} enabled
      */
     function setStopButton(stopButton, enabled) {
         stopButton.disabled = !enabled;
@@ -98,7 +105,36 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function fillCharElements() {
+        const charsDiv = document.querySelector(".chars");
+        const buttonsDiv = document.querySelector(".buttons");
+
+        while (charsDiv.firstChild && buttonsDiv.firstChild){
+            charsDiv.removeChild(charsDiv.firstChild);
+            buttonsDiv.removeChild(buttonsDiv.firstChild);
+        }
+        for (let i of Array(titleChars.length).keys()) {
+            const charDiv = document.createElement("div");
+            charDiv.className = "char";
+            charsDiv.appendChild(charDiv);
+            const stopButton = document.createElement("button");
+            stopButton.className = "stop";
+            stopButton.addEventListener("click", stopOne);
+            buttonsDiv.appendChild(stopButton);
+        }
+        charFields = Array.from((document.querySelectorAll(".char")));
+        stopButtons = Array.from((document.querySelectorAll(".stop")));
+    }
+
+    function toggleOc() {
+        console.log('toggleOc');
+        titleChars = overclockCheckbox.checked ? titleCharsOc : titleCharsWagahai;
+        fillCharElements();
+        setButtonsStopState();
+    }
+
     startButton.addEventListener("click", start);
+    overclockCheckbox.addEventListener("change", toggleOc);
     for (const stopButton of stopButtons) {
         stopButton.addEventListener("click", stopOne);
     }
